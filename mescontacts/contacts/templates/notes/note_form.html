@@ -1,0 +1,17 @@
+{% extends "contacts/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Ajouter une note pour {{ contact.prenom }} {{ contact.nom }}</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-primary mt-2">Enregistrer</button>
+    </form>
+
+    <a href="{% url 'contact_detail' contact.id %}" class="btn btn-outline-secondary mt-3">Retour</a>
+</div>
+{% endblock %}

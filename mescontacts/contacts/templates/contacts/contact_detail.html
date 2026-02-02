@@ -1,0 +1,92 @@
+{% extends "contacts/base.html" %}
+
+{% block content %}
+
+    <div class="card shadow mx-auto m-4" style="width: 18rem;">
+        {% if contact.photo %}
+           <!-- <img src="{{ contact.photo.url }}" alt="Photo" class="rounded" width="120">-->
+            <img src="{{ contact.photo.url }}" class="card-img-top" alt="...">
+        {% else %}
+            <span class="text-muted">Aucune photo</span>
+        {% endif %}
+
+        <div class="card-body">
+             <h5 class="card-title">{{ contact.nom }} {{ contact.prenom }}</h5>
+
+            {% if contact.entreprise %}
+                <p class="text-muted mb-2">
+                    <strong>Entreprise :</strong>
+                    <a href="{% url 'entreprise_detail' contact.entreprise.id %}">
+                        {{ contact.entreprise.nom }}
+                    </a>
+                </p>
+            {% else %}
+                <p class="text-muted mb-2">
+                    <strong>Entreprise :</strong> Non renseignée
+                </p>
+            {% endif %}
+
+            <hr>
+
+            <h3>Pièces jointes</h3>
+
+            <a href="{% url 'ajouter_piece_jointe' contact.id %}" class="btn btn-sm btn-dark mb-2">
+                Ajouter une pièce jointe
+            </a>
+
+            <ul class="list-group">
+                {% for pj in contact.pieces_jointes.all %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{{ pj.fichier.url }}" target="_blank">{{ pj.nom|default:pj.fichier.name }}</a>
+                        <span class="text-muted">{{ pj.date_upload|date:"d/m/Y H:i" }}</span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">Aucune pièce jointe</li>
+                {% endfor %}
+            </ul>
+
+            <hr>
+            
+            <h5>Notes internes</h5>
+
+            {% if contact.notes.all %}
+                {% for note in contact.notes.all %}
+                    <div class="card mb-2 shadow-sm">
+                        <div class="card-body">
+                            <p>{{ note.contenu }}</p>
+                            <p class="text-muted small mb-0">
+                                Écrit par {{ note.auteur.username }} le {{ note.date_creation|date:"d/m/Y H:i" }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">Aucune note pour ce contact.</p>
+            {% endif %}
+
+            <a href="{% url 'note_create' contact.id %}" class="btn btn-outline-primary btn-sm mt-2">
+                Ajouter une note
+            </a>
+
+            <hr>
+
+            {% if perms.contacts.change_contact %}
+                <a href="{% url 'contact_update' contact.id %}">Modifier</a>
+                <a href="{% url 'contact_delete' contact.id %}">Supprimer</a>
+            {% endif %}
+
+            <hr>
+        </div>
+        <div class="card-footer text-center">
+            <a href="{% url 'contact_list' %}" class="btn btn-outline-primary btn-sm hover-btn">
+                <i class="bi bi-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+
+    
+
+
+    
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "contacts/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Entreprises</h2>
+
+        {% if perms.contacts.add_entreprise %}
+            <a href="{% url 'entreprise_create' %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle"></i> Ajouter une entreprise
+            </a>
+        {% endif %}
+    </div>
+
+    {% if entreprises %}
+        <div class="row">
+            {% for entreprise in entreprises %}
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-3">
+
+                        {% if entreprise.logo %}
+                            <img src="{{ entreprise.logo.url }}" class="card-img-top"
+                                 style="height: 180px; object-fit: cover;">
+                        {% endif %}
+
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ entreprise.nom }}</h5>
+
+                            <p class="text-muted mb-1">
+                                {{ entreprise.ville }}{% if entreprise.pays %}, {{ entreprise.pays }}{% endif %}
+                            </p>
+
+                            <a href="{% url 'entreprise_detail' entreprise.id %}"
+                               class="btn btn-outline-primary btn-sm">
+                                Voir détails
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Aucune entreprise enregistrée pour le moment.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

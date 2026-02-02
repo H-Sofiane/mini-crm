@@ -1,0 +1,36 @@
+{% extends "contacts/base.html" %}
+
+{% block content %}
+
+<a href="{% url 'contact_create' %}">Ajouter un contact</a>
+
+{% for c in contacts %}
+    <img src="{{ c.photo.url }}" width="120">
+
+    <p>{{ c.prenom }} {{ c.nom }}</p>
+
+    {% if request.user.is_staff %}
+        <p>{{ c.email }}</p>
+        <a href="{% url 'contact_update' c.id %}">Modifier</a>
+        <a href="{% url 'contact_delete' c.id %}">Supprimer</a>
+    {% endif %}
+{% endfor %}
+
+
+<div class="card shadow mx-auto m-4" style="width: 18rem;">
+        <img src="{{ contact.photo.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+             <h5 class="card-title">{{ contact.nom }} {{ contact.prenom }}</h5>
+            {% if request.user.is_staff %}
+                <p>Email :{{ contact.email }}</p>
+                <a href="{% url 'contact_update' contact.id %}">Modifier</a>
+                <a href="{% url 'contact_delete' contact.id %}">Supprimer</a>
+            {% endif %}
+            <hr>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
